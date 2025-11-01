@@ -42,6 +42,7 @@ const NAME_REGEX = /^[a-zA-Z][a-zA-Z]{2,}$/;
 const PASSWORD_REGEX =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const PHONE_REGEX = /^\d{11}$/;
+const emailRegex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
 //Toggles the password view from hidden to seen for the user
 const togglePasswordView = () => {
@@ -49,57 +50,71 @@ const togglePasswordView = () => {
   console.log(passwordType.value);
 };
 
+
+const validateField = (field) => {
+  // submitted.value = false;
+  switch (field) {
+    case "firstName":
+      newUserErrors.firstName = NAME_REGEX.test(newUser.firstName)
+        ? null
+        : true;
+      break;
+    case "lastName":
+      newUserErrors.lastName = NAME_REGEX.test(newUser.lastName) ? null : true;
+      break;
+    case "phoneNumber":
+      newUserErrors.phoneNumber = PHONE_REGEX.test(newUser.phoneNumber)
+        ? null
+        : true;
+      break;
+    case "email":
+      newUserErrors.email = newUser.email.trim() ? null : true;
+      // usersDB?.some((users) => users.email === newUser.email)
+      break;
+    case "password":
+      newUserErrors.password = PASSWORD_REGEX.test(newUser.password)
+        ? null
+        : true;
+      break;
+    case "confirmPassword":
+      newUserErrors.confirmPassword =
+        newUser.confirmPassword === newUser.password ? null : true;
+      break;
+    default:
+      break;
+  }
+}
+
+function validateForm() {
+  [
+    "firstName",
+    "lastName",
+    "phoneNumber",
+    "email",
+    "password",
+    "confirmPassword",
+  ].forEach((field) => {
+    validateField(field);
+  });
+
+  return (
+    !newUserErrors.firstName &&
+    !newUserErrors.lastName &&
+    !newUserErrors.phoneNumber &&
+    !newUserErrors.email &&
+    !newUserErrors.password &&
+    !newUserErrors.confirmPassword
+  );
+  return !errors.name && !errors.email && !errors.password && !errors.age;
+}
+
 //Validates user inputs and makes sign up requests
 const handleSubmit = () => {
-  let isFormValidated = true;
-
-  if (!NAME_REGEX.test(newUser.firstName)) {
-    newUserErrors.firstName = true;
-    isFormValidated = false;
-  } else {
-    newUserErrors.firstName = false;
-  }
-
-  if (!NAME_REGEX.test(newUser.lastName)) {
-    newUserErrors.lastName = true;
-    isFormValidated = false;
-  } else {
-    newUserErrors.lastName = false;
-  }
-
-  // if (usersDB?.some((users) => users.email === newUser.email)) {
-  //     defaultUserErrors.email = true
-  //   validateForm = { ...validateForm, email: true };
-  //   isFormValidated = false;
-  // } else {
-  //     defaultUserErrors.email = true
-  //   validateForm = { ...validateForm, email: false };
-  // }
-
-  if (!PHONE_REGEX.test(newUser.phoneNumber)) {
-    newUserErrors.phoneNumber = true;
-    isFormValidated = false;
-  } else {
-    newUserErrors.phoneNumber = false;
-  }
-
-  if (!PASSWORD_REGEX.test(newUser.password)) {
-    newUserErrors.password = true;
-    isFormValidated = false;
-  } else {
-    newUserErrors.password = false;
-  }
-
-  if (newUser.password !== newUser.confirmPassword) {
-    newUserErrors.confirmPassword = true;
-    isFormValidated = false;
-  } else {
-    newUserErrors.confirmPassword = false;
-  }
-
-  // newUserErrors = defaultUserErrors
-
-  // if (usersDB?.some((users) => users.phoneNumber === newUser.phoneNumber)) {
+  if (validateForm()) {
+    console.log(newUser)
+    
+    success.value = true;
+      // if (usersDB?.some((users) => users.phoneNumber === newUser.phoneNumber)) {
   //   alert("Phone number already used");
   //   return;
   // }
@@ -110,9 +125,15 @@ const handleSubmit = () => {
   // } else {
   //   return;
   // }
-  console.log(newUser);
-  console.log(newUserErrors);
-};
+
+    // Reset
+    Object.assign(newUser, { firstName: '', lastName: '', phoneNumber: '', email: '', password: '', confirmPassword: '' })
+  } else {
+    // focus on the first invalid field 
+    const el = document.querySelector(`[aria-invalid='true']`);
+    if (el) el.focus();
+  }
+}
 </script>
 
 <template>
@@ -146,10 +167,12 @@ const handleSubmit = () => {
                     First Name:
                   </label>
                   <input
-                  id="firstName"
+                    id="firstName"
                     type="text"
                     name="firstName"
                     v-model="newUser.firstName"
+                    @input="validateField('firstName')"
+                    @blur="validateField('firstName')"
                     className="border border-[#00000093] w-full h-[3.13rem] rounded-lg px-3 outline-none focus:border-2"
                     required
                   />
@@ -165,10 +188,12 @@ const handleSubmit = () => {
                     Last Name:
                   </label>
                   <input
-                  id="lastName"
+                    id="lastName"
                     type="text"
                     name="lastName"
                     v-model="newUser.lastName"
+                    @input="validateField('lastName')"
+                    @blur="validateField('lastName')"
                     className="border border-[#00000093] w-full h-[3.13rem] rounded-lg px-3 outline-none focus:border-2"
                     required
                   />
@@ -188,14 +213,19 @@ const handleSubmit = () => {
                     Phone Number:
                   </label>
                   <input
-                  id="phoneNumber"
+                    id="phoneNumber"
                     type="tel"
                     name="phoneNumber"
                     v-model="newUser.phoneNumber"
+                    @input="validateField('phoneNumber')"
+                    @blur="validateField('phoneNumber')"
                     className="border border-[#00000093] w-full h-[3.13rem] rounded-lg px-3 outline-none focus:border-2"
                     required
                   />
-                  <span v-if="newUserErrors.phoneNumber" className="text-red-600">
+                  <span
+                    v-if="newUserErrors.phoneNumber"
+                    className="text-red-600"
+                  >
                     Phone number must consist of 11 digits
                   </span>
                 </div>
@@ -207,10 +237,12 @@ const handleSubmit = () => {
                     Email:
                   </label>
                   <input
-                  id="email"
+                    id="email"
                     type="email"
                     name="email"
                     v-model="newUser.email"
+                    @input="validateField('email')"
+                    @blur="validateField('email')"
                     className="border border-[#00000093] w-full h-[3.13rem] rounded-lg px-3 outline-none focus:border-2"
                     required
                   />
@@ -231,10 +263,12 @@ const handleSubmit = () => {
                   </label>
                   <div className="relative">
                     <input
-                    id="password"
+                      id="password"
                       :type="passwordType"
                       name="password"
                       v-model="newUser.password"
+                      @input="validateField('password')"
+                      @blur="validateField('password')"
                       className="border border-[#00000093] w-full h-[3.13rem] rounded-lg pl-3 pr-12 outline-none focus:border-2"
                       required
                     />
@@ -261,10 +295,12 @@ const handleSubmit = () => {
                   </label>
                   <div className="relative">
                     <input
-                    id="confirmPassword"
+                      id="confirmPassword"
                       :type="passwordType"
                       name="confirmPassword"
                       v-model="newUser.confirmPassword"
+                      @input="validateField('confirmPassword')"
+                      @blur="validateField('confirmPassword')"
                       className="border border-[#00000093] w-full h-[3.13rem] rounded-lg pl-3 12 outline-none focus:border-2"
                       required
                     />
@@ -277,7 +313,10 @@ const handleSubmit = () => {
                       <!-- {{passwordType === "password" ? <AiFillEye className="text-3xl" /> :  <AiFillEyeInvisible className="text-3xl" />}} -->
                     </button>
                   </div>
-                  <span v-if="newUserErrors.confirmPassword" className="text-red-600">
+                  <span
+                    v-if="newUserErrors.confirmPassword"
+                    className="text-red-600"
+                  >
                     Must match the password field
                   </span>
                 </div>
@@ -292,7 +331,10 @@ const handleSubmit = () => {
                     </a>
                   </label>
                 </div>
-                <span v-if="newUserErrors.termsAndCondition" className="text-red-600">
+                <span
+                  v-if="newUserErrors.termsAndCondition"
+                  className="text-red-600"
+                >
                   Accept Terms, Privacy Policy and Conditions to continue
                 </span>
               </div>

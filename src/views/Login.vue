@@ -133,19 +133,13 @@ const defaultUserErrors = {
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <!-- <input
+                  <input
+                  id="keepLoggedIn"
                     type="checkbox"
-                    checked={userLogin.keepLoggedIn}
-                    onChange={(e) =>
-                      setUserLogin({
-                        ...userLogin,
-                        keepLoggedIn: e.currentTarget.checked,
-                      })
-                    }
-                    name="keep-logged-in"
-                    id="keep-logged-in"
-                  /> -->
-                  <label htmlFor="terms" className="text-lg md:font-medium">
+                    checked="userLogin.keepLoggedIn"
+                    v-model="userLogin.keepLoggedIn"
+                  />
+                  <label htmlFor="keepLoggedIn" className="text-lg md:font-medium">
                     <span>Keep me logged in</span>
                   </label>
                 </div>
