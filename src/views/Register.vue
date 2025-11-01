@@ -1,0 +1,321 @@
+<script setup>
+import { ref, reactive } from "vue";
+import { RouterLink, useRouter } from "vue-router";
+// import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import dashboardBG from "../assets/images/illustration-hero.svg";
+// import { useAuthContext } from "../context/AuthContext";
+import Toast from "../components/form/Toast.vue";
+import FormButton from "../components/form/FormButton.vue";
+import OnBoardingLayout from "../layouts/OnBoardingLayout.vue";
+
+//Default values for user inputs and error checking
+const defaultUser = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  phoneNumber: "",
+  password: "",
+  confirmPassword: "",
+  termsAndCondition: false,
+};
+
+const defaultUserErrors = {
+  firstName: false,
+  lastName: false,
+  email: false,
+  phoneNumber: false,
+  password: false,
+  confirmPassword: false,
+  termsAndCondition: false,
+};
+
+const success = ref(false);
+const newUser = reactive(defaultUser);
+const passwordType = ref("password");
+//   const [passwordType, setPasswordType] = useState("password");
+const newUserErrors = reactive(defaultUserErrors);
+//   const { dispatch, usersDB } = useAuthContext();
+const passwordView = ref(null);
+const router = useRouter();
+
+const NAME_REGEX = /^[a-zA-Z][a-zA-Z]{2,}$/;
+const PASSWORD_REGEX =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+const PHONE_REGEX = /^\d{11}$/;
+
+//Toggles the password view from hidden to seen for the user
+const togglePasswordView = () => {
+  passwordType.value = passwordType.value === "password" ? "text" : "password";
+  console.log(passwordType.value);
+};
+
+//Validates user inputs and makes sign up requests
+const handleSubmit = () => {
+  let isFormValidated = true;
+
+  if (!NAME_REGEX.test(newUser.firstName)) {
+    newUserErrors.firstName = true;
+    isFormValidated = false;
+  } else {
+    newUserErrors.firstName = false;
+  }
+
+  if (!NAME_REGEX.test(newUser.lastName)) {
+    newUserErrors.lastName = true;
+    isFormValidated = false;
+  } else {
+    newUserErrors.lastName = false;
+  }
+
+  // if (usersDB?.some((users) => users.email === newUser.email)) {
+  //     defaultUserErrors.email = true
+  //   validateForm = { ...validateForm, email: true };
+  //   isFormValidated = false;
+  // } else {
+  //     defaultUserErrors.email = true
+  //   validateForm = { ...validateForm, email: false };
+  // }
+
+  if (!PHONE_REGEX.test(newUser.phoneNumber)) {
+    newUserErrors.phoneNumber = true;
+    isFormValidated = false;
+  } else {
+    newUserErrors.phoneNumber = false;
+  }
+
+  if (!PASSWORD_REGEX.test(newUser.password)) {
+    newUserErrors.password = true;
+    isFormValidated = false;
+  } else {
+    newUserErrors.password = false;
+  }
+
+  if (newUser.password !== newUser.confirmPassword) {
+    newUserErrors.confirmPassword = true;
+    isFormValidated = false;
+  } else {
+    newUserErrors.confirmPassword = false;
+  }
+
+  // newUserErrors = defaultUserErrors
+
+  // if (usersDB?.some((users) => users.phoneNumber === newUser.phoneNumber)) {
+  //   alert("Phone number already used");
+  //   return;
+  // }
+
+  // if (isFormValidated) {
+  //   dispatch({ type: "ADD_USER", payload: newUser });
+  //   setSuccess(true);
+  // } else {
+  //   return;
+  // }
+  console.log(newUser);
+  console.log(newUserErrors);
+};
+</script>
+
+<template>
+  <OnBoardingLayout>
+    <section className="max-w-[1440px] mx-auto">
+      <div className="px-4 mx-auto my-8 lg:my-12 xl:flex gap-10">
+        <figure className="bg-blue-700 xl:w-1/2 rounded-lg md:hidden xl:block">
+          <img
+            :src="dashboardBG"
+            className=" object-cover object-center"
+            alt="Dashboard background"
+          />
+        </figure>
+        <div className="xl:w-1/2 py-2 md:pt-6">
+          <div className="mb-6 lg:mb-8">
+            <h1 className="text-[1.7rem] text-[#000000d5] font-semibold">
+              Register
+            </h1>
+            <p className="text-lg text-[#000000d5]">Sign up to get started</p>
+          </div>
+          <div>
+            <form @submit.prevent="handleSubmit">
+              <div
+                className="flex flex-col md:flex-row gap-3 md:gap-5 mb-3 md:mb-6"
+              >
+                <div className="md:w-[50%]">
+                  <label
+                    htmlFor="firstName"
+                    className="text-lg lg:text-xl font-medium text-[#000000d5] inline-block mb-2"
+                  >
+                    First Name:
+                  </label>
+                  <input
+                  id="firstName"
+                    type="text"
+                    name="firstName"
+                    v-model="newUser.firstName"
+                    className="border border-[#00000093] w-full h-[3.13rem] rounded-lg px-3 outline-none focus:border-2"
+                    required
+                  />
+                  <span v-if="newUserErrors.firstName" className="text-red-600">
+                    Must be more than 2 characters, letters only
+                  </span>
+                </div>
+                <div className="md:w-[50%]">
+                  <label
+                    htmlFor="lastName"
+                    className="text-lg lg:text-xl font-medium text-[#000000d5] inline-block mb-2"
+                  >
+                    Last Name:
+                  </label>
+                  <input
+                  id="lastName"
+                    type="text"
+                    name="lastName"
+                    v-model="newUser.lastName"
+                    className="border border-[#00000093] w-full h-[3.13rem] rounded-lg px-3 outline-none focus:border-2"
+                    required
+                  />
+                  <span v-if="newUserErrors.lastName" className="text-red-600">
+                    Must be more than 2 characters, letters only
+                  </span>
+                </div>
+              </div>
+              <div
+                className="flex flex-col md:flex-row gap-3 md:gap-5 mb-3 md:mb-6"
+              >
+                <div className="md:w-[50%]">
+                  <label
+                    htmlFor="phoneNumber"
+                    className="text-lg lg:text-xl font-medium text-[#000000d5] inline-block mb-2"
+                  >
+                    Phone Number:
+                  </label>
+                  <input
+                  id="phoneNumber"
+                    type="tel"
+                    name="phoneNumber"
+                    v-model="newUser.phoneNumber"
+                    className="border border-[#00000093] w-full h-[3.13rem] rounded-lg px-3 outline-none focus:border-2"
+                    required
+                  />
+                  <span v-if="newUserErrors.phoneNumber" className="text-red-600">
+                    Phone number must consist of 11 digits
+                  </span>
+                </div>
+                <div className="md:w-[50%]">
+                  <label
+                    htmlFor="email"
+                    className="text-lg lg:text-xl font-medium text-[#000000d5] inline-block mb-2"
+                  >
+                    Email:
+                  </label>
+                  <input
+                  id="email"
+                    type="email"
+                    name="email"
+                    v-model="newUser.email"
+                    className="border border-[#00000093] w-full h-[3.13rem] rounded-lg px-3 outline-none focus:border-2"
+                    required
+                  />
+                  <span v-if="newUserErrors.email" className="text-red-600">
+                    Email already used
+                  </span>
+                </div>
+              </div>
+              <div
+                className="flex flex-col md:flex-row gap-3 md:gap-5 mb-3 md:mb-6"
+              >
+                <div className="md:w-[50%]">
+                  <label
+                    htmlFor="password"
+                    className="text-lg lg:text-xl font-medium text-[#000000d5] inline-block mb-2"
+                  >
+                    Password:
+                  </label>
+                  <div className="relative">
+                    <input
+                    id="password"
+                      :type="passwordType"
+                      name="password"
+                      v-model="newUser.password"
+                      className="border border-[#00000093] w-full h-[3.13rem] rounded-lg pl-3 pr-12 outline-none focus:border-2"
+                      required
+                    />
+                    <button
+                      className="absolute right-3 top-[0.62rem] outline-none"
+                      type="button"
+                      @click="togglePasswordView"
+                    >
+                      {{ passwordType === "password" ? "Cp" : "Op" }}
+                      <!-- passwordType === "password" ? <AiFillEye className="text-3xl" /> :  <AiFillEyeInvisible className="text-3xl" /> -->
+                    </button>
+                  </div>
+                  <span v-if="newUserErrors.password" className="text-red-600">
+                    Must be more than 8 characters, should include upper and
+                    lowercase letters, a number and a special character (!@#$%)
+                  </span>
+                </div>
+                <div className="md:w-[50%]">
+                  <label
+                    htmlFor="confirmPassword"
+                    className="text-lg lg:text-xl font-medium text-[#000000d5] inline-block mb-2"
+                  >
+                    Confirm Password:
+                  </label>
+                  <div className="relative">
+                    <input
+                    id="confirmPassword"
+                      :type="passwordType"
+                      name="confirmPassword"
+                      v-model="newUser.confirmPassword"
+                      className="border border-[#00000093] w-full h-[3.13rem] rounded-lg pl-3 12 outline-none focus:border-2"
+                      required
+                    />
+                    <button
+                      className="absolute right-3 top-[0.62rem] outline-none"
+                      type="button"
+                      @click="togglePasswordView"
+                    >
+                      {{ passwordType === "password" ? "Cp" : "Op" }}
+                      <!-- {{passwordType === "password" ? <AiFillEye className="text-3xl" /> :  <AiFillEyeInvisible className="text-3xl" />}} -->
+                    </button>
+                  </div>
+                  <span v-if="newUserErrors.confirmPassword" className="text-red-600">
+                    Must match the password field
+                  </span>
+                </div>
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <input type="checkbox" v-model="newUser.termsAndCondition" />
+                  <label htmlFor="terms" className="text-[0.82rem] md:text-lg">
+                    <span>I agree to all the </span>
+                    <a href="/" className="text-blue-600 font-medium">
+                      Terms, Privacy Policy and Conditions
+                    </a>
+                  </label>
+                </div>
+                <span v-if="newUserErrors.termsAndCondition" className="text-red-600">
+                  Accept Terms, Privacy Policy and Conditions to continue
+                </span>
+              </div>
+              <FormButton label="Create Account" />
+              <div className="text-center">
+                <p className="text-[1.125rem] text-[#000000d5] font-medium">
+                  <span>Already have an account? </span>
+                  <RouterLink to="/login" className="text-blue-600">
+                    Log in
+                  </RouterLink>
+                </p>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Successful registration overlay  -->
+      <Toast
+        message="Registered Successfully"
+        :closeForm="() => router.push('/login')"
+        :success="success"
+      />
+    </section>
+  </OnBoardingLayout>
+</template>
