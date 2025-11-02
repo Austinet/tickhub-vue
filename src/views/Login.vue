@@ -5,6 +5,7 @@ import dashboardBG from "../assets/images/illustration-hero.svg";
 import Toast from "../components/form/Toast.vue";
 import FormButton from "../components/form/FormButton.vue";
 import OnBoardingLayout from "../layouts/OnBoardingLayout.vue";
+import { inject } from "vue";
 
 //Default values for user inputs and error checking
 const defaultDetails = {
@@ -18,49 +19,38 @@ const defaultUserErrors = {
   password: false,
 };
 
-  const userLogin = reactive(defaultDetails);
-  const userLoginErrors = reactive(defaultUserErrors);
-  const passwordType= ref("password");
-  const passwordView = ref(null);
-//   const { dispatch, usersDB } = useAuthContext();
-  const router = useRouter();
+const userLogin = reactive(defaultDetails);
+const userLoginErrors = reactive(defaultUserErrors);
+const showPassword = ref(false);
+const router = useRouter();
+const appStore = inject("appStore");
 
+//Toggles the password view from hidden to seen for the user
+const toggleShowPassword = () => {
+  showPassword.value = !showPassword.value;
+};
 
-  
-  //Toggles the password view from hidden to seen for the user
-//   const setPasswordView = computed(
-//     () => {
-//     passwordType.value = passwordType.value === "password" ? "text" : "password"
-//     console.log(passwordType.value)
-//     return passwordType
-//   } 
-//   )
+//Validates user and makes login requests
+const handleSubmit = () => {
+  console.log(userLogin);
+  const usersDB = appStore.getUsers();
 
-//     const togglePasswordView = () => {
-//     passwordType.value = passwordType.value === "password" ? "text" : "password"
-//     console.log(passwordType.value)
-//   } 
+  const authenticateUser = usersDB?.find(
+    (user) => user.email === userLogin.email
+  );
 
-
-   //Validates user and makes login requests
-  const handleSubmit = () => {
-    console.log(userLogin)
-    // const authenticate = usersDB?.find(
-    //   (user) => user.email === userLogin.email
-    // );
-
-    // if (authenticate) {
-    //   if (authenticate.password === userLogin.password) {
-    //     dispatch({ type: "USER_LOGGED_IN", payload: userLogin });
-    //     navigate("/dashboard");
-    //   } else {
-    //     setUserLoginErrors({ ...userLoginErrors, password: true });
-    //   }
-    // } else {
-    //   setUserLoginErrors({ ...userLoginErrors, email: true });
-    // }
-    router.push("/dashboard");
-  };
+  if (authenticateUser) {
+    userLoginErrors.email = null;
+    if (authenticateUser.password === userLogin.password) {
+      // dispatch({ type: "USER_LOGGED_IN", payload: userLogin });
+      router.push("/dashboard");
+    } else {
+      userLoginErrors.password = true;
+    }
+  } else {
+    userLoginErrors.email = true;
+  }
+};
 </script>
 
 <template>
@@ -76,7 +66,9 @@ const defaultUserErrors = {
         </figure>
         <div className="xl:w-1/2 py-2 md:pt-6">
           <div className="mb-6 lg:mb-8">
-            <h1 className="text-[1.7rem] xl:text-[2rem] text-[#000000d5] font-semibold">
+            <h1
+              className="text-[1.7rem] xl:text-[2rem] text-[#000000d5] font-semibold"
+            >
               Login
             </h1>
           </div>
@@ -98,7 +90,7 @@ const defaultUserErrors = {
                     className="border border-[#00000093] w-full h-[3.13rem] md: rounded-lg px-3 outline-none focus:border-2"
                     required
                   />
-                  <span :className="`text-red-600 ${userLoginErrors.email ? 'block' : 'hidden'}`">
+                  <span v-if="userLoginErrors.email" className="text-red-600">
                     Email not found, please sign up
                   </span>
                 </div>
@@ -110,10 +102,9 @@ const defaultUserErrors = {
                     Password:
                   </label>
                   <div className="relative">
-                    <!-- :type="setPasswordView.value" -->
                     <input
-                      
-                      type="password"
+                      id="password"
+                      :type="showPassword ? 'text' : 'password'"
                       name="password"
                       v-model="userLogin.password"
                       className="border border-[#00000093] w-full h-[3.13rem] rounded-lg px-3 outline-none focus:border-2"
@@ -121,12 +112,16 @@ const defaultUserErrors = {
                     />
                     <button
                       className="absolute right-3 top-[0.62rem] outline-none"
-                      @click="togglePasswordView "type="button"
+                      @click="toggleShowPassword"
+                      type="button"
                     >
-                      {{passwordType === "password" ? "Cp" :  "Op"}}
+                      {{ showPassword ? "Cp" : "Op" }}
                     </button>
                   </div>
-                  <span :className="`text-red-600 ${userLoginErrors.password ? 'block' : 'hidden'}`">
+                  <span
+                    v-if="userLoginErrors.password"
+                    className="text-red-600"
+                  >
                     Incorrect password
                   </span>
                 </div>
@@ -134,12 +129,15 @@ const defaultUserErrors = {
               <div>
                 <div className="flex items-center gap-2">
                   <input
-                  id="keepLoggedIn"
+                    id="keepLoggedIn"
                     type="checkbox"
                     checked="userLogin.keepLoggedIn"
                     v-model="userLogin.keepLoggedIn"
                   />
-                  <label htmlFor="keepLoggedIn" className="text-lg md:font-medium">
+                  <label
+                    htmlFor="keepLoggedIn"
+                    className="text-lg md:font-medium"
+                  >
                     <span>Keep me logged in</span>
                   </label>
                 </div>

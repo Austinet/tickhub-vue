@@ -1,6 +1,11 @@
 <script setup>
-import Footer from './components/home/Footer.vue';
-import { RouterView } from 'vue-router';
+import Footer from "./components/home/Footer.vue";
+import { useAppStore } from "./stores/useAppStore";
+import { reactive, provide } from "vue";
+import { RouterView } from "vue-router";
+
+const appStore = useAppStore();
+provide("appStore", appStore);
 </script>
 
 <template>
@@ -8,6 +13,4 @@ import { RouterView } from 'vue-router';
     <RouterView />
     <Footer />
   </div>
-
-  <!-- <h1 v-if class="bg-blue-300">bbbb </h1> -->
 </template>

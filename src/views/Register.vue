@@ -7,6 +7,10 @@ import dashboardBG from "../assets/images/illustration-hero.svg";
 import Toast from "../components/form/Toast.vue";
 import FormButton from "../components/form/FormButton.vue";
 import OnBoardingLayout from "../layouts/OnBoardingLayout.vue";
+import { inject } from "vue";
+
+const appStore = inject("appStore");
+console.log(appStore);
 
 //Default values for user inputs and error checking
 const defaultUser = {
@@ -31,8 +35,7 @@ const defaultUserErrors = {
 
 const success = ref(false);
 const newUser = reactive(defaultUser);
-const passwordType = ref("password");
-//   const [passwordType, setPasswordType] = useState("password");
+const showPassword = ref(false);
 const newUserErrors = reactive(defaultUserErrors);
 //   const { dispatch, usersDB } = useAuthContext();
 const passwordView = ref(null);
@@ -45,11 +48,9 @@ const PHONE_REGEX = /^\d{11}$/;
 const emailRegex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
 //Toggles the password view from hidden to seen for the user
-const togglePasswordView = () => {
-  passwordType.value = passwordType.value === "password" ? "text" : "password";
-  console.log(passwordType.value);
+const toggleShowPassword = () => {
+  showPassword.value = !showPassword.value;
 };
-
 
 const validateField = (field) => {
   // submitted.value = false;
@@ -69,7 +70,6 @@ const validateField = (field) => {
       break;
     case "email":
       newUserErrors.email = newUser.email.trim() ? null : true;
-      // usersDB?.some((users) => users.email === newUser.email)
       break;
     case "password":
       newUserErrors.password = PASSWORD_REGEX.test(newUser.password)
@@ -83,7 +83,7 @@ const validateField = (field) => {
     default:
       break;
   }
-}
+};
 
 function validateForm() {
   [
@@ -111,29 +111,46 @@ function validateForm() {
 //Validates user inputs and makes sign up requests
 const handleSubmit = () => {
   if (validateForm()) {
-    console.log(newUser)
-    
-    success.value = true;
-      // if (usersDB?.some((users) => users.phoneNumber === newUser.phoneNumber)) {
-  //   alert("Phone number already used");
-  //   return;
-  // }
+    const usersDB = appStore.getUsers();
+    if (usersDB?.some((users) => users.phoneNumber === newUser.phoneNumber)) {
+      alert("Phone number already used");
+      return;
+    } else if (usersDB?.some((users) => users.email === newUser.email)) {
+      alert("Email address already used");
+      return;
+    } else {
+      const user = {};
 
-  // if (isFormValidated) {
-  //   dispatch({ type: "ADD_USER", payload: newUser });
-  //   setSuccess(true);
-  // } else {
-  //   return;
-  // }
+      for (const key in newUser) {
+        user[key] = newUser[key];
+      }
+
+      appStore.addUser(user);
+      success.value = true;
+    }
+
+    // if (isFormValidated) {
+    //   dispatch({ type: "ADD_USER", payload: newUser });
+    //   setSuccess(true);
+    // } else {
+    //   return;
+    // }
 
     // Reset
-    Object.assign(newUser, { firstName: '', lastName: '', phoneNumber: '', email: '', password: '', confirmPassword: '' })
+    Object.assign(newUser, {
+      firstName: "",
+      lastName: "",
+      phoneNumber: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    });
   } else {
-    // focus on the first invalid field 
+    // focus on the first invalid field
     const el = document.querySelector(`[aria-invalid='true']`);
     if (el) el.focus();
   }
-}
+};
 </script>
 
 <template>
@@ -264,7 +281,7 @@ const handleSubmit = () => {
                   <div className="relative">
                     <input
                       id="password"
-                      :type="passwordType"
+                      :type="showPassword ? 'text' : 'password'"
                       name="password"
                       v-model="newUser.password"
                       @input="validateField('password')"
@@ -275,9 +292,9 @@ const handleSubmit = () => {
                     <button
                       className="absolute right-3 top-[0.62rem] outline-none"
                       type="button"
-                      @click="togglePasswordView"
+                      @click="toggleShowPassword"
                     >
-                      {{ passwordType === "password" ? "Cp" : "Op" }}
+                      {{ showPassword ? "Cp" : "Op" }}
                       <!-- passwordType === "password" ? <AiFillEye className="text-3xl" /> :  <AiFillEyeInvisible className="text-3xl" /> -->
                     </button>
                   </div>
@@ -296,7 +313,7 @@ const handleSubmit = () => {
                   <div className="relative">
                     <input
                       id="confirmPassword"
-                      :type="passwordType"
+                      :type="showPassword ? 'text' : 'password'"
                       name="confirmPassword"
                       v-model="newUser.confirmPassword"
                       @input="validateField('confirmPassword')"
@@ -307,9 +324,9 @@ const handleSubmit = () => {
                     <button
                       className="absolute right-3 top-[0.62rem] outline-none"
                       type="button"
-                      @click="togglePasswordView"
+                      @click="toggleShowPassword"
                     >
-                      {{ passwordType === "password" ? "Cp" : "Op" }}
+                      {{ showPassword ? "Cp" : "Op" }}
                       <!-- {{passwordType === "password" ? <AiFillEye className="text-3xl" /> :  <AiFillEyeInvisible className="text-3xl" />}} -->
                     </button>
                   </div>
