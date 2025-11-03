@@ -3,43 +3,20 @@ import { ref } from "vue";
 import DashboardLayout from "../layouts/DashboardLayout.vue";
 import TicketCard from "../components/dashboard/TicketCard.vue";
 import ViewTicket from "../components/dashboard/ViewTicket.vue";
-import UpdateTicket from "../components/form/UpdateTicket.vue";
-import AddTicket from "../components/form/AddTicket.vue";
 import { inject } from "vue";
 
-const showAddTicketForm = ref(false);
-const showUpdateTicketForm = ref(false);
-const showViewTicketForm = ref(false);
+const showTicket = ref(false);
 const ticketItem = ref({});
 const appStore = inject("appStore");
-
 const ticketList = ref(appStore.getTickets());
-
-const toggleShowForm = (form) => {
-  switch (form) {
-    case "ADD_TICKET":
-      showAddTicketForm.value = !showAddTicketForm.value;
-      break;
-    case "UPDATE_TICKET":
-      showUpdateTicketForm.value = !showUpdateTicketForm.value;
-      break;
-    case "VIEW_TICKET":
-      showViewTicketForm.value = !showViewTicketForm.value;
-      break;
-
-    default:
-      break;
-  }
-};
-
-const updateTicket = (ticket) => {
-  ticketItem.value = ticket;
-  toggleShowForm("UPDATE_TICKET");
-};
 
 const viewTicket = (ticket) => {
   ticketItem.value = ticket;
-  toggleShowForm("VIEW_TICKET");
+  showTicket.value = !showTicket.value;
+};
+
+const closeForm = () => {
+  showTicket.value = false;
 };
 
 const deleteTicket = (id) => {
@@ -66,13 +43,13 @@ const deleteTicket = (id) => {
             Manage and track all your tickets
           </p>
         </div>
-        <button
-          @click="toggleShowForm('ADD_TICKET')"
+        <RouterLink
+          to="/tickets/add"
           className=" bg-blue-800 text-white w-fit px-[1.1rem] py-[0.8rem] md:px-[1.3rem] md:py-4 rounded-[5px] outline-none flex items-center gap-2 text-[1.3rem] font-medium hover:opacity-90"
         >
           <span>+</span>
           <span>Add Ticket</span>
-        </button>
+        </RouterLink>
       </div>
 
       <!-- Tickets  -->
@@ -86,26 +63,15 @@ const deleteTicket = (id) => {
           :key="ticket.id"
           :ticket="ticket"
           :deleteTicket="deleteTicket"
-          :updateTicket="updateTicket"
           :viewTicket="viewTicket"
         />
       </div>
 
-      <!-- Add Ticket Form  -->
-      <AddTicket v-if="showAddTicketForm" :toggleShowForm="toggleShowForm" />
-
       <!-- View Ticket Form  -->
       <ViewTicket
-        v-if="showViewTicketForm"
+        v-if="showTicket"
         :ticket="ticketItem"
-        :toggleShowForm="toggleShowForm"
-      />
-
-      <!-- Update Ticket Form  -->
-      <UpdateTicket
-        v-if="showUpdateTicketForm"
-        :ticket="ticketItem"
-        :toggleShowForm="toggleShowForm"
+        :closeForm="closeForm"
       />
     </section>
   </DashboardLayout>

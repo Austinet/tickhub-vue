@@ -1,10 +1,12 @@
 <script setup>
+import Toast from "../components/form/Toast.vue";
+import DashboardLayout from "../layouts/DashboardLayout.vue";
+import { useRouter } from "vue-router";
 import { reactive, ref } from "vue";
-import Toast from "./Toast.vue";
 import { inject } from "vue";
+const router = useRouter();
 
 const props = defineProps({
-  toggleShowForm: Function,
   success: Boolean,
 });
 
@@ -30,7 +32,6 @@ const DESCRIPTION_REGEX = /^[a-zA-Z][a-zA-Z0-9]{5,}$/;
 
 // Add Ticket
 const validateField = (field) => {
-  // submitted.value = false;
   switch (field) {
     case "title":
       newTicketErrors.title = TITLE_REGEX.test(newTicket.title) ? null : true;
@@ -87,22 +88,21 @@ const addTicket = () => {
 };
 
 const closeForm = () => {
-  props.toggleShowForm("ADD_TICKET");
   success.value = false;
+  router.push("/tickets");
 };
 </script>
 
 <template>
-  <section
-    className="fixed flex justify-center items-center bg-[#000000cc] top-0 left-0 w-full min-h-screen p-4"
-  >
-    <div className="w-full bg-white max-w-[700px] p-4 lg:p-8 rounded-lg shadow">
-      <div className="flex items-center justify-between mb-8">
-        <h2 className="text-2xl font-medium">Create New Ticket</h2>
-        <button className="text-[1.5rem] outline-none" @click="closeForm">
-          <!-- <IoClose /> -->
-          x
-        </button>
+  <DashboardLayout>
+    <section
+      className="w-full bg-white max-w-[700px] p-4 lg:p-8 rounded-lg shadow"
+    >
+      <div className="mb-8">
+        <RouterLink to="/tickets" class="text-lg hover:text-slate-500">
+          Go back
+        </RouterLink>
+        <h2 className="text-2xl font-medium mt-4">Create New Ticket</h2>
       </div>
 
       <form @submit.prevent="addTicket">
@@ -162,8 +162,7 @@ const closeForm = () => {
             name="status"
             id="status"
             v-model="newTicket.status"
-            @input="validateField('status')"
-            @blur="validateField('status')"
+            @change="validateField('status')"
             required
             className="w-full p-[0.9rem] border rounded text-[1.1rem] outline-none"
           >
@@ -183,13 +182,13 @@ const closeForm = () => {
           Save Ticket
         </button>
       </form>
-    </div>
 
-    <!-- Successful ticket creation overlay  -->
-    <Toast
-      :success="success"
-      message="Ticket Added Successfully"
-      :closeForm="closeForm"
-    />
-  </section>
+      <!-- Successful ticket creation overlay  -->
+      <Toast
+        :success="success"
+        message="Ticket Added Successfully"
+        :closeForm="closeForm"
+      />
+    </section>
+  </DashboardLayout>
 </template>

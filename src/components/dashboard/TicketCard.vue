@@ -1,4 +1,7 @@
 <script setup>
+import { onMounted } from "vue";
+import { RouterLink } from "vue-router";
+
 const statusStyles = {
   open: "bg-green-200 text-green-800",
   in_progress: "bg-amber-200 text-amber-800",
@@ -47,10 +50,14 @@ const { id, title, description, status } = props.ticket;
         <!-- <AiFillEye /> -->
         V
       </button>
-      <button @click="updateTicket(props.ticket)" className="text-blue-700">
-        <!-- <FaPencil /> -->
+      <!-- <button @click="updateTicket(props.ticket)" className="text-blue-700">
+        
         E
-      </button>
+      </button> -->
+      <router-link :to="`/tickets/update/${id}`" className="text-blue-700"
+        >E
+        <!-- <FaPencil /> -->
+      </router-link>
       <button @click="deleteTicket(id)" className="text-red-700">
         <!-- <MdDelete /> -->
         D

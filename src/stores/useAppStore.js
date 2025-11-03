@@ -33,7 +33,7 @@ export function useAppStore() {
 
   // Tickets
   const addTicket = (ticket) => {
-    state.ticketsDB.push({ id: new Date().getTime().toString(), ...ticket });
+    state.ticketsDB.unshift({ id: new Date().getTime().toString(), ...ticket });
     saveToLocalStorage("tickHubTickets", state.ticketsDB);
   };
 
