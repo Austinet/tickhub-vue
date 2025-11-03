@@ -44,7 +44,8 @@ const viewTicket = (ticket) => {
 
 const deleteTicket = (id) => {
   if (!confirm("Are you sure you want to delete this ticket?")) return;
-  dispatch({ type: "DELETE_TICKET", payload: id });
+  appStore.deleteTicket(id);
+  ticketList.value = appStore.getTickets();
 };
 </script>
 

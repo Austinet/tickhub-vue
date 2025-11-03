@@ -48,7 +48,7 @@ export function useAppStore() {
 
   const deleteTicket = (id) => {
     state.ticketsDB = state.ticketsDB.filter(
-      (ticketItem) => ticketItem.id === id
+      (ticketItem) => ticketItem.id !== id
     );
     saveToLocalStorage("tickHubTickets", state.ticketsDB);
   };

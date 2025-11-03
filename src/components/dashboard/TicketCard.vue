@@ -17,7 +17,6 @@ const props = defineProps({
   updateTicket: Function,
   deleteTicket: Function,
 });
-console.log(props.ticket)
 
 const { id, title, description, status } = props.ticket;
 </script>
@@ -28,15 +27,19 @@ const { id, title, description, status } = props.ticket;
   >
     <div className="space-y-2">
       <h3 className="text-[1.2rem] font-medium">
-        {{ title.length < 22 ? title : `${title.substring(0,24)}...` }}
+        {{ title.length < 22 ? title : `${title.substring(0, 24)}...` }}
       </h3>
       <p className="text-[1.1rem]">
-        {{description.length < 65 ? description :
-        `${description.substring(0,65)}...`}}
+        {{
+          description.length < 65
+            ? description
+            : `${description.substring(0, 65)}...`
+        }}
       </p>
       <p
         :className="`${statusStyles[status]} w-fit px-2 py-1 text-lg rounded-xl`"
-      >{{ status === "in_progress" ? "In progress" : status }}
+      >
+        {{ status === "in_progress" ? "In progress" : status }}
       </p>
     </div>
     <div className="flex items-center justify-between gap-12 text-2xl">
