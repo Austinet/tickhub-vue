@@ -29,21 +29,25 @@ const router = createRouter({
       path: "/dashboard",
       name: "dashboard",
       component: Dashboard,
+      meta: { requiresAuth: true },
     },
     {
       path: "/tickets",
       name: "tickets",
       component: Tickets,
+      meta: { requiresAuth: true },
     },
     {
       path: "/tickets/add",
       name: "addTicket",
       component: AddTicket,
+      meta: { requiresAuth: true },
     },
     {
       path: "/tickets/update/:id",
       name: "updateTicket",
       component: UpdateTicket,
+      meta: { requiresAuth: true },
     },
     {
       path: "/:catchAll(.*)",
@@ -51,6 +55,16 @@ const router = createRouter({
       component: Home,
     },
   ],
+});
+
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = JSON.parse(localStorage.getItem("ticketapp_session"));
+
+  if (to.meta.requiresAuth && !isAuthenticated?.token) {
+    next("/login");
+  } else {
+    next();
+  }
 });
 
 export default router;

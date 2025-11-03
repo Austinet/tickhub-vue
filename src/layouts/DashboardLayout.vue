@@ -1,14 +1,16 @@
 <script setup>
 import { ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import { inject } from "vue";
 
-//  const { authenticatedUser, dispatch } = useAuthContext();
-const authenticatedUser = {
-  firstName: "Austine",
-};
+const isAuthenticated = JSON.parse(localStorage.getItem("ticketapp_session"));
+const { firstName } = isAuthenticated.user;
+const appStore = inject("appStore");
+
 const openMenu = ref(false);
 // const { firstName,  } = authenticatedUser;
 const location = useRoute();
+const router = useRouter();
 
 const tabStyles = {
   active: "bg-blue-200 text-blue-800",
@@ -17,12 +19,12 @@ const tabStyles = {
 };
 
 const toggleMobileMenu = () => {
-  console.log(openMenu.value);
   openMenu.value = !openMenu.value;
 };
 
 const logout = () => {
-  dispatch({ type: "LOG_OUT" });
+  appStore.logout();
+  router.push("/login");
 };
 </script>
 
@@ -39,14 +41,12 @@ const logout = () => {
 
       <!-- User profile -->
       <div className="flex items-center gap-3">
-        <p className="text-lg font-medium">
-          Welcome, {{ authenticatedUser?.firstName }}
-        </p>
+        <p className="text-lg font-medium">Welcome, {{ firstName }}</p>
         <div
           className="hidden md:flex bg-blue-600 w-[50px] h-[50px] text-white rounded-full items-center justify-center"
         >
           <p className="text-lg font-medium">
-            {{ authenticatedUser.firstName.charAt(0) }}
+            {{ firstName.charAt(0) }}
           </p>
         </div>
         <!-- Menu icon for mobile -->

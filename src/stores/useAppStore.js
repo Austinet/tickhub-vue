@@ -31,6 +31,11 @@ export function useAppStore() {
     saveToLocalStorage("ticketapp_session", state.ticketappSession);
   };
 
+  const logout = (user) => {
+    state.ticketappSession = {};
+    saveToLocalStorage("ticketapp_session", state.ticketappSession);
+  };
+
   // Tickets
   const addTicket = (ticket) => {
     state.ticketsDB.unshift({ id: new Date().getTime().toString(), ...ticket });
@@ -57,6 +62,8 @@ export function useAppStore() {
     state,
     addUser,
     getUsers,
+    login,
+    logout,
     addTicket,
     getTickets,
     updateTicket,

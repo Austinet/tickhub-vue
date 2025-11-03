@@ -32,7 +32,6 @@ const toggleShowPassword = () => {
 
 //Validates user and makes login requests
 const handleSubmit = () => {
-  console.log(userLogin);
   const usersDB = appStore.getUsers();
 
   const authenticateUser = usersDB?.find(
@@ -42,7 +41,7 @@ const handleSubmit = () => {
   if (authenticateUser) {
     userLoginErrors.email = null;
     if (authenticateUser.password === userLogin.password) {
-      // dispatch({ type: "USER_LOGGED_IN", payload: userLogin });
+      appStore.login(authenticateUser);
       router.push("/dashboard");
     } else {
       userLoginErrors.password = true;
