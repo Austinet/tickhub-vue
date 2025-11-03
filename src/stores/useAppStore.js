@@ -16,7 +16,7 @@ export function useAppStore() {
 
   // Users
   const addUser = (user) => {
-    state.usersDB.push({ id: Date.now(), ...user });
+    state.usersDB.push({ id: new Date().getTime().toString(), ...user });
     saveToLocalStorage("tickHubUsers", state.usersDB);
   };
 
@@ -33,7 +33,7 @@ export function useAppStore() {
 
   // Tickets
   const addTicket = (ticket) => {
-    state.ticketsDB.push({ id: Date.now(), ...ticket });
+    state.ticketsDB.push({ id: new Date().getTime().toString(), ...ticket });
     saveToLocalStorage("tickHubTickets", state.ticketsDB);
   };
 

@@ -5,18 +5,15 @@ import TicketCard from "../components/dashboard/TicketCard.vue";
 import ViewTicket from "../components/dashboard/ViewTicket.vue";
 import UpdateTicket from "../components/form/UpdateTicket.vue";
 import AddTicket from "../components/form/AddTicket.vue";
+import { inject } from "vue";
 
 const showAddTicketForm = ref(false);
 const showUpdateTicketForm = ref(false);
 const showViewTicketForm = ref(false);
 const ticketItem = ref({});
-//   const { dispatch, ticketList } = useAuthContext();
-const ticketList = ref([{
-    id: "ttt",
-    title: "gggggggg",
-    description: "jjjjjjj",
-    status: "open"
-}]);
+const appStore = inject("appStore");
+
+const ticketList = ref(appStore.getTickets());
 
 const toggleShowForm = (form) => {
   switch (form) {

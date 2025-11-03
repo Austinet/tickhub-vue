@@ -3,14 +3,10 @@ import { ref, reactive } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 // import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import dashboardBG from "../assets/images/illustration-hero.svg";
-// import { useAuthContext } from "../context/AuthContext";
 import Toast from "../components/form/Toast.vue";
 import FormButton from "../components/form/FormButton.vue";
 import OnBoardingLayout from "../layouts/OnBoardingLayout.vue";
 import { inject } from "vue";
-
-const appStore = inject("appStore");
-console.log(appStore);
 
 //Default values for user inputs and error checking
 const defaultUser = {
@@ -37,15 +33,14 @@ const success = ref(false);
 const newUser = reactive(defaultUser);
 const showPassword = ref(false);
 const newUserErrors = reactive(defaultUserErrors);
-//   const { dispatch, usersDB } = useAuthContext();
-const passwordView = ref(null);
 const router = useRouter();
+const appStore = inject("appStore");
 
 const NAME_REGEX = /^[a-zA-Z][a-zA-Z]{2,}$/;
 const PASSWORD_REGEX =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const PHONE_REGEX = /^\d{11}$/;
-const emailRegex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
+const EMAIL_REGEX = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
 //Toggles the password view from hidden to seen for the user
 const toggleShowPassword = () => {
@@ -105,7 +100,6 @@ function validateForm() {
     !newUserErrors.password &&
     !newUserErrors.confirmPassword
   );
-  return !errors.name && !errors.email && !errors.password && !errors.age;
 }
 
 //Validates user inputs and makes sign up requests
@@ -115,36 +109,24 @@ const handleSubmit = () => {
     if (usersDB?.some((users) => users.phoneNumber === newUser.phoneNumber)) {
       alert("Phone number already used");
       return;
-    } else if (usersDB?.some((users) => users.email === newUser.email)) {
-      alert("Email address already used");
-      return;
-    } else {
-      const user = {};
-
-      for (const key in newUser) {
-        user[key] = newUser[key];
-      }
-
-      appStore.addUser(user);
-      success.value = true;
     }
 
-    // if (isFormValidated) {
-    //   dispatch({ type: "ADD_USER", payload: newUser });
-    //   setSuccess(true);
-    // } else {
-    //   return;
-    // }
+    if (usersDB?.some((users) => users.email === newUser.email)) {
+      alert("Email address already used");
+      return;
+    }
+
+    const user = {};
+
+    for (const key in newUser) {
+      user[key] = newUser[key];
+    }
+
+    appStore.addUser(user);
+    success.value = true;
 
     // Reset
-    Object.assign(newUser, {
-      firstName: "",
-      lastName: "",
-      phoneNumber: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    });
+    Object.assign(newUser, defaultUser);
   } else {
     // focus on the first invalid field
     const el = document.querySelector(`[aria-invalid='true']`);
