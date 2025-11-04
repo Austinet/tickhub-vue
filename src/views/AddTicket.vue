@@ -27,8 +27,8 @@ const newTicketErrors = reactive(ticketErrors);
 const success = ref(false);
 const appStore = inject("appStore");
 
-const TITLE_REGEX = /^[a-zA-Z][a-zA-Z0-9]{5,}$/;
-const DESCRIPTION_REGEX = /^[a-zA-Z][a-zA-Z0-9]{5,}$/;
+const TITLE_REGEX = /^[a-zA-Z][a-zA-Z0-9\s]{5,}$/;
+const DESCRIPTION_REGEX = /^[a-zA-Z][a-zA-Z0-9\s]{5,}$/;
 
 // Add Ticket
 const validateField = (field) => {

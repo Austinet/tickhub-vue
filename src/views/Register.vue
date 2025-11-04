@@ -16,7 +16,6 @@ const defaultUser = {
   phoneNumber: "",
   password: "",
   confirmPassword: "",
-  termsAndCondition: false,
 };
 
 const defaultUserErrors = {
@@ -322,7 +321,7 @@ const handleSubmit = () => {
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <input type="checkbox" v-model="newUser.termsAndCondition" />
+                  <input type="checkbox" required />
                   <label htmlFor="terms" className="text-[0.82rem] md:text-lg">
                     <span>I agree to all the </span>
                     <a href="/" className="text-blue-600 font-medium">

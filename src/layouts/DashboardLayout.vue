@@ -8,7 +8,6 @@ const { firstName } = isAuthenticated.user;
 const appStore = inject("appStore");
 
 const openMenu = ref(false);
-// const { firstName,  } = authenticatedUser;
 const location = useRoute();
 const router = useRouter();
 
@@ -36,7 +35,7 @@ const logout = () => {
         className="flex items-center gap-[0.35rem] font-semibold text-[1.3rem] md:text-[1.4rem] "
       >
         <!-- <FaTicketSimple className="text-indigo-600" /> -->
-        <h2 className="">TickHub</h2>
+        <h2 className="text-blue-700">TickHub</h2>
       </div>
 
       <!-- User profile -->
@@ -63,7 +62,7 @@ const logout = () => {
     <main className="flex relative">
       <nav
         :className="`min-w-[250px] lg:min-w-[300px] min-h-[80vh] absolute lg:static ${
-          openMenu ? 'left-0' : 'left-[-50rem] top-0'
+          openMenu ? 'left-0' : 'left-[-90rem] top-0'
         } bg-[#000a] lg:bg-white w-full lg:p-8 lg:w-fit`"
       >
         <ul className="bg-white h-screen px-4 py-6 w-[70%] lg:w-full lg:p-0">
@@ -82,7 +81,7 @@ const logout = () => {
             <RouterLink
               to="/tickets"
               :className="`${
-                location.path === '/tickets' && tabStyles.active
+                location.path.split('/').includes('tickets') && tabStyles.active
               } ${tabStyles.others}`"
             >
               <!-- <BsTicket className="text-[1.8rem]" /> -->
@@ -99,7 +98,7 @@ const logout = () => {
       </nav>
 
       <!-- iframe  -->
-      <section className="p-4 lg:p-6 bg-gray-100 w-full min-h-[70vh]">
+      <section className="p-4 md:p-8 bg-gray-100 w-full min-h-[70vh]">
         <slot></slot>
       </section>
     </main>

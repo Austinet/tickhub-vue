@@ -12,10 +12,6 @@ const props = defineProps({
     type: String,
   },
 });
-
-// setTimeout(() => {
-//   props.closeForm();
-// }, 3000);
 </script>
 
 <template>

@@ -31,7 +31,7 @@ const deleteTicket = (id) => {
     <section>
       <!-- Header -->
       <div
-        className="flex flex-col lg:flex-row lg:justify-between gap-4 lg:items-center mb-12"
+        className="flex flex-col md:flex-row md:justify-between gap-4 md:items-center mb-12"
       >
         <div>
           <h1
@@ -56,7 +56,7 @@ const deleteTicket = (id) => {
       <p v-if="!ticketList.length">No tickets to display</p>
       <div
         v-else
-        className="flex flex-col flex-wrap gap-14 items-center lg:flex-row "
+        className="flex flex-wrap gap-10 items-center justify-center md:justify-between"
       >
         <TicketCard
           v-for="ticket in ticketList"
