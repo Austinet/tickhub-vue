@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import DashboardLayout from "../layouts/DashboardLayout.vue";
 import TicketCard from "../components/dashboard/TicketCard.vue";
 import ViewTicket from "../components/dashboard/ViewTicket.vue";
@@ -10,6 +10,24 @@ const ticketItem = ref({});
 const appStore = inject("appStore");
 const ticketList = ref(appStore.getTickets());
 
+const searchQuery = ref("");
+const selectedStatus = ref("all");
+
+const filteredTickets = computed(() => {
+  const query = searchQuery.value.trim().toLocaleLowerCase();
+  const status = selectedStatus.value;
+
+  return ticketList.value.filter((ticket) => {
+    const matchQuery =
+      ticket.title.toLowerCase().includes(query) ||
+      ticket.description.toLowerCase().includes(query);
+
+    const matchStatus =
+      status === "all" ? true : ticket.status.toLowerCase() === status;
+
+    return matchQuery && matchStatus;
+  });
+});
 const viewTicket = (ticket) => {
   ticketItem.value = ticket;
   showTicket.value = !showTicket.value;
@@ -31,7 +49,7 @@ const deleteTicket = (id) => {
     <section>
       <!-- Header -->
       <div
-        className="flex flex-col md:flex-row md:justify-between gap-4 md:items-center mb-12"
+        className="flex  md:flex-row justify-between gap-4 items-end md:items-center mb-6"
       >
         <div>
           <h1
@@ -39,27 +57,52 @@ const deleteTicket = (id) => {
           >
             Tickets
           </h1>
-          <p className="text-[1.2rem] text-gray-800">
+          <p className="md:text-[1.2rem] text-gray-800 w-[150px] sm:w-fit">
             Manage and track all your tickets
           </p>
         </div>
         <RouterLink
           to="/tickets/add"
-          className=" bg-blue-800 text-white w-fit px-[1.1rem] py-[0.8rem] md:px-[1.3rem] md:py-4 rounded-[5px] outline-none flex items-center gap-2 text-[1.3rem] font-medium hover:opacity-90"
+          className=" bg-blue-800 text-white w-fit px-[1rem] py-[0.8rem] md:px-[1.3rem] md:py-4 rounded-[5px] outline-none flex items-center gap-2 text-[1.1rem] md:text-[1.3rem] font-medium hover:opacity-90"
         >
           <span>+</span>
           <span>Add Ticket</span>
         </RouterLink>
       </div>
 
+      <!-- Search and filter features -->
+      <div
+        class="mb-8 flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-6"
+      >
+        <div class="w-full max-w-[400px]">
+          <input
+            type="text"
+            className="w-full p-[0.9rem] border rounded text-[1.1rem] outline-blue-400 "
+            placeholder="Search using ticket title or decription"
+            v-model="searchQuery"
+          />
+        </div>
+        <div>
+          <select
+            v-model="selectedStatus"
+            class="border p-[0.9rem] rounded w-[120px] focus:outline focus:outline-blue-400 text-[1.1rem]"
+          >
+            <option value="all">All</option>
+            <option value="open">Open</option>
+            <option value="in_progress">In progress</option>
+            <option value="closed">Closed</option>
+          </select>
+        </div>
+      </div>
+
       <!-- Tickets  -->
-      <p v-if="!ticketList.length">No tickets to display</p>
+      <p v-if="!filteredTickets.length">No tickets to display</p>
       <div
         v-else
         className="flex flex-wrap gap-10 items-center justify-center md:justify-between"
       >
         <TicketCard
-          v-for="ticket in ticketList"
+          v-for="ticket in filteredTickets"
           :key="ticket.id"
           :ticket="ticket"
           :deleteTicket="deleteTicket"
