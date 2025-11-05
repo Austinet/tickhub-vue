@@ -33,8 +33,8 @@ const success = ref(false);
 const serverError = ref("");
 const appStore = inject("appStore");
 
-const TITLE_REGEX = /^[a-zA-Z][a-zA-Z0-9\s]{5,}$/;
-const DESCRIPTION_REGEX = /^[a-zA-Z][a-zA-Z0-9\s]{5,}$/;
+const TITLE_REGEX = /^(?=.*[A-Za-z])[A-Za-z0-9\s.,!?'’"()\-:]{5,100}$/;
+const DESCRIPTION_REGEX = /^(?=.*[A-Za-z])[\w\s.,!?'"@#%&()\-:;\/]{10,500}$/;
 
 onMounted(() => {
   const ticketList = appStore.getTickets();

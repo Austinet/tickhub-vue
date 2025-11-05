@@ -2,7 +2,5 @@
 - Implement search feature
 - Implement filter feature 
 - Fix regular expression to accept comma and dot
-- Fix dashboard to show numbers
 - Write Readme
-- Add Netlify redirect
 - Settings (dark/light mode, change password)
