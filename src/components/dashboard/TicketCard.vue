@@ -1,4 +1,5 @@
 <script setup>
+import { PhEye, PhPencilSimple, PhTrash } from "@phosphor-icons/vue";
 import { RouterLink } from "vue-router";
 
 const statusStyles = {
@@ -45,21 +46,23 @@ const { id, title, description, status } = props.ticket;
       </p>
     </div>
     <div className="flex items-center justify-between gap-12 text-2xl">
-      <button @click="viewTicket(props.ticket)" className="text-green-700">
-        <!-- <AiFillEye /> -->
-        V
+      <button
+        @click="viewTicket(props.ticket)"
+        className="text-green-700 outline-none hover:scale-110"
+      >
+        <PhEye />
       </button>
-      <!-- <button @click="updateTicket(props.ticket)" className="text-blue-700">
-        
-        E
-      </button> -->
-      <router-link :to="`/tickets/update/${id}`" className="text-blue-700"
-        >E
-        <!-- <FaPencil /> -->
+      <router-link
+        :to="`/tickets/update/${id}`"
+        className="text-blue-700 outline-none hover:scale-110"
+      >
+        <PhPencilSimple />
       </router-link>
-      <button @click="deleteTicket(id)" className="text-red-700">
-        <!-- <MdDelete /> -->
-        D
+      <button
+        @click="deleteTicket(id)"
+        className="text-red-700 outline-none hover:scale-110"
+      >
+        <PhTrash />
       </button>
     </div>
   </div>

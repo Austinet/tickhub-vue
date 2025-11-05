@@ -6,6 +6,7 @@ import Toast from "../components/form/Toast.vue";
 import FormButton from "../components/form/FormButton.vue";
 import OnBoardingLayout from "../layouts/OnBoardingLayout.vue";
 import { inject } from "vue";
+import { PhEye, PhEyeSlash } from "@phosphor-icons/vue";
 
 //Default values for user inputs and error checking
 const defaultDetails = {
@@ -110,11 +111,12 @@ const handleSubmit = () => {
                       required
                     />
                     <button
-                      className="absolute right-3 top-[0.62rem] outline-none"
+                      className="absolute right-3 top-[0.62rem] outline-none text-3xl"
                       @click="toggleShowPassword"
                       type="button"
                     >
-                      {{ showPassword ? "Cp" : "Op" }}
+                      <PhEye v-if="!showPassword" />
+                      <PhEyeSlash v-else />
                     </button>
                   </div>
                   <span

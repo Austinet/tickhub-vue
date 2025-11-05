@@ -1,4 +1,6 @@
 <script setup>
+import { PhX } from "@phosphor-icons/vue";
+
 const props = defineProps({
   ticket: Object,
   closeForm: Function,
@@ -29,8 +31,7 @@ const statusBorderStyles = {
       <div class="flex items-center justify-between mb-8">
         <h2 class="text-2xl font-medium">About Ticket</h2>
         <button class="text-[1.5rem] outline-none" @click="closeForm">
-          <!-- <IoClose /> -->
-          x
+          <PhX />
         </button>
       </div>
 

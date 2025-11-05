@@ -120,7 +120,12 @@ const closeForm = () => {
 
 <template>
   <DashboardLayout>
-    <RouterLink to="/tickets">Go back</RouterLink>
+    <RouterLink
+      to="/tickets"
+      class="text-lg flex items-center gap-1 hover:text-slate-500"
+    >
+      <PhCaretLeft /> <span>Go back</span>
+    </RouterLink>
     <section className="w-full mt-4">
       <p v-if="serverError" class="text-lg text-red-600">{{ serverError }}</p>
 

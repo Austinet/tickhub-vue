@@ -4,6 +4,7 @@ import DashboardLayout from "../layouts/DashboardLayout.vue";
 import { useRouter } from "vue-router";
 import { reactive, ref } from "vue";
 import { inject } from "vue";
+import { PhCaretLeft } from "@phosphor-icons/vue";
 const router = useRouter();
 
 const props = defineProps({
@@ -99,8 +100,11 @@ const closeForm = () => {
       className="w-full bg-white max-w-[700px] p-4 lg:p-8 rounded-lg shadow"
     >
       <div className="mb-8">
-        <RouterLink to="/tickets" class="text-lg hover:text-slate-500">
-          Go back
+        <RouterLink
+          to="/tickets"
+          class="text-lg flex items-center gap-1 hover:text-slate-500"
+        >
+          <PhCaretLeft /> <span>Go back</span>
         </RouterLink>
         <h2 className="text-2xl font-medium mt-4">Create New Ticket</h2>
       </div>

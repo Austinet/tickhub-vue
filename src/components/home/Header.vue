@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from "vue";
+import { PhList, PhTicket, PhX } from "@phosphor-icons/vue";
 
 const navLinks = [
   {
@@ -32,9 +33,9 @@ const toggleMenu = () => {
   >
     <!-- Logo container  -->
     <RouterLink to="/">
-      <div class="flex items-center gap-[0.35rem] font-semibold text-[1.4rem]">
-        <!-- <FaTicketSimple class="text-indigo-600" /> -->
-        <h2 class="text-blue-700">TickHub</h2>
+      <div class="flex items-center gap-[0.35rem] font-semibold">
+        <PhTicket class="text-blue-700 text-[1.5rem]" />
+        <h2 class="text-blue-700 text-[1.4rem]">TickHub</h2>
       </div>
     </RouterLink>
 
@@ -63,13 +64,9 @@ const toggleMenu = () => {
       </nav>
 
       <!-- Menu icon for mobile  -->
-      <button class="outline-none lg:hidden" @click="toggleMenu">
-        <!-- {openMenu ? (
-            <IoClose class="text-[1.8rem]" />
-          ) : (
-            <IoMenu class="text-[1.8rem]" />
-          )} -->
-        Menu
+      <button class="outline-none lg:hidden text-[1.8rem]" @click="toggleMenu">
+        <PhList v-if="!openMenu" />
+        <PhX v-else />
       </button>
     </div>
   </header>

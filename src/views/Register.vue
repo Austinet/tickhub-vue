@@ -1,12 +1,12 @@
 <script setup>
 import { ref, reactive } from "vue";
 import { RouterLink, useRouter } from "vue-router";
-// import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import dashboardBG from "../assets/images/illustration-hero.svg";
 import Toast from "../components/form/Toast.vue";
 import FormButton from "../components/form/FormButton.vue";
 import OnBoardingLayout from "../layouts/OnBoardingLayout.vue";
 import { inject } from "vue";
+import { PhEye, PhEyeSlash } from "@phosphor-icons/vue";
 
 //Default values for user inputs and error checking
 const defaultUser = {
@@ -271,12 +271,12 @@ const handleSubmit = () => {
                       required
                     />
                     <button
-                      className="absolute right-3 top-[0.62rem] outline-none"
+                      className="absolute right-3 top-[0.62rem] outline-none text-3xl"
                       type="button"
                       @click="toggleShowPassword"
                     >
-                      {{ showPassword ? "Cp" : "Op" }}
-                      <!-- passwordType === "password" ? <AiFillEye className="text-3xl" /> :  <AiFillEyeInvisible className="text-3xl" /> -->
+                      <PhEye v-if="!showPassword" />
+                      <PhEyeSlash v-else />
                     </button>
                   </div>
                   <span v-if="newUserErrors.password" className="text-red-600">
@@ -303,12 +303,12 @@ const handleSubmit = () => {
                       required
                     />
                     <button
-                      className="absolute right-3 top-[0.62rem] outline-none"
+                      className="absolute right-3 top-[0.62rem] outline-none text-3xl"
                       type="button"
                       @click="toggleShowPassword"
                     >
-                      {{ showPassword ? "Cp" : "Op" }}
-                      <!-- {{passwordType === "password" ? <AiFillEye className="text-3xl" /> :  <AiFillEyeInvisible className="text-3xl" />}} -->
+                      <PhEye v-if="!showPassword" />
+                      <PhEyeSlash v-else />
                     </button>
                   </div>
                   <span

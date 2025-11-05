@@ -1,6 +1,3 @@
 - Add Icons
-- Implement search feature
-- Implement filter feature 
-- Fix regular expression to accept comma and dot
 - Write Readme
-- Settings (dark/light mode, change password)
+import {Icon} from '@iconify/vue'

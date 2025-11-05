@@ -1,4 +1,6 @@
 <script setup>
+import { PhCheckFat } from "@phosphor-icons/vue";
+
 const props = defineProps({
   success: {
     type: Boolean,
@@ -23,12 +25,13 @@ const props = defineProps({
     <div
       className="w-[90%] max-w-[500px] h-[300px] bg-white shadow-xl rounded-lg flex justify-center items-center flex-col text-center"
     >
-      <!-- <AiOutlineCheck className="inline-block text-[3.5rem] md:text-[4.5rem] text-green-700" /> -->
-      Ic
-      <h2 className="text-xl xl:text-2xl font-semibold mb-6">{{ message }}</h2>
+      <PhCheckFat
+        class="inline-block text-[2.5rem] md:text-[3.5rem] text-green-700 mb-2"
+      />
+      <h2 className="text-xl xl:text-2xl font-medium mb-6">{{ message }}</h2>
       <button
         @click="closeForm"
-        className="w-[250px] py-3 text-lg md:text-xl text-center font-semibold bg-blue-600 text-white rounded-lg "
+        className="w-[250px] py-3 text-lg md:text-xl text-center font-semibold bg-blue-600 hover:bg-blue-700 text-white rounded-lg "
       >
         Close
       </button>

@@ -2,6 +2,14 @@
 import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { inject } from "vue";
+import {
+  PhList,
+  PhSignIn,
+  PhSignOut,
+  PhSquaresFour,
+  PhTicket,
+  PhX,
+} from "@phosphor-icons/vue";
 
 const isAuthenticated = JSON.parse(localStorage.getItem("ticketapp_session"));
 const { firstName } = isAuthenticated.user;
@@ -31,11 +39,9 @@ const logout = () => {
   <div className="relative">
     <header className="p-4 md:p-8 flex justify-between items-center">
       <!-- Logo container  -->
-      <div
-        className="flex items-center gap-[0.35rem] font-semibold text-[1.3rem] md:text-[1.4rem] "
-      >
-        <!-- <FaTicketSimple className="text-indigo-600" /> -->
-        <h2 className="text-blue-700">TickHub</h2>
+      <div className="flex items-center gap-[0.35rem] font-semibold ">
+        <PhTicket class="text-blue-700 text-[1.4rem] md:text-[1.5rem]" />
+        <h2 class="text-blue-700 text-[1.3rem] md:text-[1.4rem]">TickHub</h2>
       </div>
 
       <!-- User profile -->
@@ -50,11 +56,8 @@ const logout = () => {
         </div>
         <!-- Menu icon for mobile -->
         <button className="outline-none lg:hidden" @click="toggleMobileMenu">
-          <!-- {openMenu ? (
-              <IoClose className="text-[1.8rem]" />
-            ) : (
-              <IoMenu className="text-[1.8rem]" />
-            )} -->Menu
+          <PhList v-if="!openMenu" />
+          <PhX v-else />
         </button>
       </div>
     </header>
@@ -73,7 +76,7 @@ const logout = () => {
                 location.path === '/dashboard' && tabStyles.active
               } ${tabStyles.others}`"
             >
-              <!-- <LuLayoutDashboard className="text-[1.8rem]" /> -->
+              <PhSquaresFour class="text-[1.8rem]" />
               <span>Dashboard</span>
             </RouterLink>
           </li>
@@ -84,14 +87,14 @@ const logout = () => {
                 location.path.split('/').includes('tickets') && tabStyles.active
               } ${tabStyles.others}`"
             >
-              <!-- <BsTicket className="text-[1.8rem]" /> -->
+              <PhTicket class="text-[1.8rem]" />
               <span>Tickets</span>
             </RouterLink>
           </li>
           <li>
             <button @click="logout" :className="`${tabStyles.others} shadow`">
               <span>Logout</span>
-              <!-- <MdLogout className="text-[1.8rem]" /> -->
+              <PhSignOut class="text-[1.8rem]" />
             </button>
           </li>
         </ul>

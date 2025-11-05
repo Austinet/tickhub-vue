@@ -4,6 +4,7 @@ import DashboardLayout from "../layouts/DashboardLayout.vue";
 import TicketCard from "../components/dashboard/TicketCard.vue";
 import ViewTicket from "../components/dashboard/ViewTicket.vue";
 import { inject } from "vue";
+import { PhMagnifyingGlass } from "@phosphor-icons/vue";
 
 const showTicket = ref(false);
 const ticketItem = ref({});
@@ -74,12 +75,15 @@ const deleteTicket = (id) => {
       <div
         class="mb-8 flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-6"
       >
-        <div class="w-full max-w-[400px]">
+        <div class="w-full max-w-[400px] relative">
           <input
             type="text"
-            className="w-full p-[0.9rem] border rounded text-[1.1rem] outline-blue-400 "
+            className="w-full p-[0.9rem] pr-[3.3rem] border rounded text-[1.1rem] outline-blue-400 "
             placeholder="Search using ticket title or decription"
             v-model="searchQuery"
+          />
+          <PhMagnifyingGlass
+            class="text-[1.8rem] absolute top-[0.9rem] right-[0.9rem] text-gray-500"
           />
         </div>
         <div>
