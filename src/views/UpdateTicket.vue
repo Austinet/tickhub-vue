@@ -181,7 +181,7 @@ const closeForm = () => {
               v-if="updateTicketErrors.description"
               className="text-red-600"
             >
-              Please enter a valid description, Must be more than 5 characters,
+              Please enter a valid description, Must be more than 10 characters,
               beginning with a letter
             </span>
           </div>

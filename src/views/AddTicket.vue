@@ -151,7 +151,7 @@ const closeForm = () => {
             className="w-full h-[90px] p-[0.9rem] border rounded text-[1.1rem] outline-none resize-none"
           ></textarea>
           <span v-if="newTicketErrors.description" className="text-red-600">
-            Please enter a valid description, Must be more than 5 characters,
+            Please enter a valid description, Must be more than 10 characters,
             beginning with a letter
           </span>
         </div>

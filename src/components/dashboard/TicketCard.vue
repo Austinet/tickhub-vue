@@ -26,7 +26,7 @@ const { id, title, description, status } = props.ticket;
 
 <template>
   <div
-    :className="`border-l-4 ${statusBorderStyles[status]} flex flex-col justify-between space-y-3 bg-white px-5 py-5 rounded-lg shadow w-[300px] min-h-[200px]`"
+    :className="`border-l-4 h-[200px] ${statusBorderStyles[status]} flex flex-col justify-between space-y-3 bg-white px-4 py-4 rounded-lg shadow w-[300px]`"
   >
     <div className="space-y-2">
       <h3 className="text-[1.2rem] font-medium">
@@ -34,9 +34,9 @@ const { id, title, description, status } = props.ticket;
       </h3>
       <p className="text-[1.1rem]">
         {{
-          description.length < 65
+          description.length < 60
             ? description
-            : `${description.substring(0, 65)}...`
+            : `${description.substring(0, 60)}...`
         }}
       </p>
       <p
